@@ -1,0 +1,165 @@
+<html>
+
+<head>
+    <meta name="Szimu" content="Triple Roll">
+
+    <body>
+        <div style="background-color: #93DBEF; border: 4px solid #FF9E00; width: 500px; height: 700px; margin: 0 auto; position: relative; overflow: hidden; border-radius: 15px; left: 0; background-size: 20% %; background-clip: content-box; background-origin: content-box; text-align: center; font-family: 'Gill Sans', 'Gill Sans MT', 'Myriad Pro', 'DejaVu Sans Condensed', Helvetica, Arial, sans-serif;">
+            <div id="Credit" style="position: absolute; top: 287px; right: 2px; font-family: 'Gill Sans', 'Gill Sans MT', 'Myriad Pro', 'DejaVu Sans Condensed', Helvetica, Arial, sans-serif; font-weight: bold; text-align: center; text-decoration: none; font-size: x-large; width: 507px; height: 30px;"></div>
+            <div id="Dice0" style="left: 81px;"></div>
+            <div id="Dice1" style="left: 233px;"></div>
+            <div id="Dice2" style="left: 385px;"></div>
+            <div id="Message" style="position: absolute; left: 3px; right: 5px; top: 378px; text-align: center; font-family: 'Gill Sans', 'Gill Sans MT', 'Myriad Pro', 'DejaVu Sans Condensed', Helvetica, Arial, sans-serif; font-weight: bold; font-size: xx-large; text-decoration: none;"></div>
+            <div style="text-align: center; background-color: #B7AEAE; border-top: 1px solid #000; padding: 4px 0; position: absolute; width: 0px; left: 0; bottom: 2px; height: -2px;">
+                <input id="BetAmount" type="text" style="width: 45px; text-align: center; height: 45px; background-color: #F9F8F8; position: absolute; top: -184px; left: 225px; font-size: large; font-weight: bold; font-family: Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif; border-color: #FF9E00; border-radius: 5px;" value="1" />
+                <button id="Bet" style="width: 93px; font-family: Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: x-large; text-align: center; font-weight: bold; height: 59px; border-color: #FF9E00; border-radius: 5px; position: absolute; left: 204px; top: -96px; background-color: #FF9E00;"><span class="blinkbutton">BET<span>
+	<button id="Stop" style="width: 93px; font-family: Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: x-large; text-align: center; font-weight: bold; height: 59px; border-color: #FF9E00; border-radius: 5px; position: absolute; left: 204px; top: -270px; background-color: #FF9E00;">STOP
+	<button id="Reset" style="width: 90px; font-family: Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: medium; text-align: center; font-weight: bold; height: 25px; border-color: #FF9E00; border-radius: 5px; position: absolute; left: 204px; top: -355px; background-color: #FF9E00;">RESET
+	</div>
+		<h1 style="color: #FF9E00; font-size: 60;";>
+		<span class="blink">TRIPLE ROLL<span>
+		</h1>
+		</div>
+		<div style="width: 800px; margin: 10px auto;">
+		</div>
+</body>
+<style type="text/css"> /*above, a box called BetAmount include the value 1, this is the minimum betting value.*/
+			#Dice0, 	/*3 cubes styles; shape, color, border, size, etc. Counting from 0, those are part of an array*/
+			#Dice1,
+			#Dice2 {
+	position: absolute;	/*in the body above there are attribute nodes(id), and their style, definition.*/
+	width: 90px;
+	height: 90px;
+	text-align: center;
+	line-height: 90px;
+	top: 128px;
+	margin-left: -25px;
+	border: 3px solid #FF9E00;
+	background-color: #fff;
+	border-radius: 10px;
+	color: #000000;
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+	font-weight: bolder;
+	font-size: 80px;
+			}
+
+	
+		body {			/*the background's wallpaper, its position and size.*/
+	background-image: url(BG1.jpg);
+	margin-top: 50px;
+	background-position: 50px%;
+	-webkit-box-shadow: 0px 0px;
+	box-shadow: 0px 0px;
+	background-size: cover;
+			}
+	{font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+	}						/*animation for heading, flashing animation, its length and opacity settings.*/	
+			.blink{
+	-webkit-animation:blink 0.5s linear infinite;
+	-moz-animation:blink 0.5s linear infinite;
+	animation:blink 2s linear infinite;
+	}
+
+	@keyframes blink{
+	0%{opacity:1;}
+	50%{opacity:0.2;}
+	100%{opacity:1;}
+	}
+	/*animation for button, same as heading's, i thought it would be better to create another one, with different timing*/
+	{	
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+	}
+
+			.blinkbutton{
+	-webkit-animation:blink 0.5s linear infinite;
+	-moz-animation:blink 0.5s linear infinite;
+	animation:blink 1s linear infinite;
+	}
+
+	@keyframes blinkbutton{
+	0%{opacity:0.5;}
+	50%{opacity:0.7;}
+	100%{opacity:1;}
+	}
+
+</style>
+<script>
+function game() { //the whole game in a function, in order to reset it
+	var totalCredit = 100, rounds = 10, //variables for starting credit, and rounds, i'm counting backwards.
+		dice = [], //array for dice variables, 0,1 and 2 are the names of them, counting from 0
+		amount, credit, message, // amount is in BetAmount, which is the box of type space.
+		i; //i, for loops i, could be anything, but better to call it i to be obvious.
+		// 0,1 and 2, 3 will be false
+	for (i = 0; i < 3; ++i) {dice.push(document.getElementById('Dice' + i));}
+function updateCredit(value)
+	{
+		totalCredit += value;
+			// 
+		return credit.innerHTML = 'Credit: <u>' + totalCredit + '</u> Rounds: <u>' + rounds + '</u>';
+	}
+			credit  = document.getElementById('Credit');
+			amount  = document.getElementById('BetAmount');
+			message = document.getElementById('Message');
+/*function getValidNumber(promptText) {
+		do {
+			var ok = true;
+			var n = prompt(promptText);
+			if (isNaN(parseFloat(n)) && 0 <= ~~n|| n == ""||n == '-'||n == '-'+ parseFloat           
+				) {
+				alert("Please enter a non zero integer value!");
+				ok = false;
+			}
+			else {
+				ok = true;
+			}
+		} while (! ok);
+		return n;		
+	}*/ /*event, the responsibility of this part, the value to be precise, can be just number and can't be less than 1. Certainly i have a function which prevents to type other values than a number but i think its more efficent, won't be the code too long. Here is the function;*/
+		amount.onchange = function() {this.value = Math.max(parseInt('0' + this.value, 10), 1);};
+		// onclick event, when a click is made on Bet, this is going to happen, so counting the rounds with "rules".
+		var Bet = document.getElementById('Bet');
+		Bet.onclick = function(){
+			var betting = Number(amount.value)//amount is the BetAmount type in cube, value what the user types in, 	
+			var	values = [] 				  //BetAmount's value, that 2 together is the betting variable.
+			var winnings = 0,
+				i;
+
+			if (!rounds){ 					  //! - unary negation operator, or logical NOT.
+				if (confirm('Continue?')) {rounds = 10; updateCredit(0);}
+				}else if (betting > 100) {alert('Please enter a number between 1-100!');
+				}else if (betting > totalCredit) {alert('Not enough credits!');
+				//}else if (betting < 0) {alert('Too low!'); not necessary, owing to the amount.onchange event
+				//}else if (betting == NaN){ this neather, i left them to see, i wrote the function for it.
+				//	getValidNumber();
+				}else {
+					rounds--; //decrementing from 10 rounds till 0, counting backwards.
+					updateCredit(-betting);//substraction from the credit,-betting; updateCredit displays current credit
+				for (i = 0; i < dice.length; ++i) {dice[i].innerHTML = values[i] = Math.floor(Math.random() * 6) + 1;}
+					if (values[0] === values[1] && values[0] === values[2]) {winnings = (betting * (1 === values[0] ? 30 : 20)) + betting; // ? - ternary operator - if condition is true, the operator returns the value of expr1; otherwise, it returns the value of expr2. Here logical to use this operator because if all dice show 1 or all dice show same number.
+					} else if (values[0] === values[1] || values[0] === values[2] || values[1] === values[2]) {winnings = (betting * 8) + betting; //if 2 dice show same value...
+					} else if ((values[0] + values[1] + values[2]) >= 15) {winnings = (betting * 2) + betting;//min.15 
+					} else if ((values[0] === 6 || values[1] === 6 || values[2] === 6) || ((values[0] % 2) && (values[1] % 2) && (values[2] % 2))) {winnings = betting;} //odd numbers or 1 die shows 6. % is remainder. 
+
+				if (winnings) {
+					updateCredit(winnings);	//if true, show winnings
+					message.innerHTML = 'Win <b>' + winnings + '</b> credits!';
+				}else {						//if false...
+					message.innerHTML = 'You lose!';
+						}
+					}
+				};
+		Stop.onclick = function(){	// i wrote an .onclick event to be able to stop the user the game.
+			document.getElementById('Bet').disabled=true; //disable the button, the user won't be able to click.
+			message.innerHTML = 'You stopped with ' + totalCredit + ' credits';}
+				return updateCredit(0);
+		}
+		//reset the webpage without putting the whole code into a function
+		Reset.onclick = function(){
+			history.go(0);}
+		game();
+		// I wrote a function which starts the whole program again(working,tested), but the numbers in the cubes are going to stay there, so i decided to use the history.go(0) inbuild method, it's clearing the cubes too.
+		/*Reset.onclick = function(){ // i turned "off" this function, i found a better method to my purpose.
+			game();
+		}*/
+		</script>
+</head>
